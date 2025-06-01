@@ -10,5 +10,5 @@ The final stages of the tutorial will introduce more advanced concepts, leading 
 
 ## What You Should Know Before You Start
 I assume that you already know some things about the computer programming: 
- - The C programming language and its tools. We are doing bare metal coding here, so you should know how to write, compile, and link C programs. Deep assembly knowledge is not necessary but you should be able to read it.
- - General knowledge of CPU architecture. I will be using such terms as registers, interrupts, memory addresses, IRQ handlers, without explaining them.
+ - The C programming language and its toolchain. We are doing bare-metal coding here, so you should know how to write, compile, and link C programs. Deep knowledge of assembly is not required, but you should be able to read and understand basic assembly code.
+ - A general understanding of CPU architecture. I will be using terms such as registers, interrupts, memory addresses, and IRQ handlers without explaining them in detail.
