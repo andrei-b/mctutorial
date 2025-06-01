@@ -1,3 +1,4 @@
+![](img/arduino-led-to-blink.jpg)
 # Intro
 
 I've always found programming with Arduino in its default form rather uninspiring. The environment encourages a narrow and overly simplified programming model with which not many good things can be made. As such, I wouldn’t recommend Arduino as a platform for someone looking to learn the fundamentals of programming .
