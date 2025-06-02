@@ -12,6 +12,7 @@ In this tutorial, we will explore microcontroller programming through bare-metal
 I assume that you already know some things about the computer programming: 
  - The C programming language and its toolchain. We are doing bare-metal coding here, so you should know how to write, compile, and link C programs. Deep knowledge of assembly is not required, but you should be able to read and understand basic assembly code.
  - A general understanding of CPU architecture. I will be using terms such as registers, interrupts, memory addresses, and IRQ handlers without explaining them in detail.
+
 ## The hardware
 I am using the Arduino Uno R3. It is the *minimum minimorum* of Arduino boards, based on an 8-bit ATmega328P processor with only 2 kilobytes of RAM. Yet, in bare-metal mode, it is capable of running many interesting applications.
 You can also use any earlier version of the Uno (prior to R3), but not the Uno R4 — that is a completely different system. The Arduino Mega is also a suitable alternative.
@@ -23,3 +24,9 @@ For more advanced use, you can consider the Atmel-ICE, a professional-grade (and
 Finally, in a pinch, you can even use another Arduino as a programmer. The Arduino as ISP sketch lets you turn a regular Uno into a basic ISP programmer — useful and educational, though not as reliable for frequent use.
 
 It is also good to have a couple of LEDs and resistors.
+
+## The software
+To program AVR microcontrollers nn bare-metal mode, you typically use a small set of essential tools — some for writing code, some for compiling it, and others for uploading it to the chip.
+- avr-gcc is the GNU Compiler Collection configured for AVR. It's the core of all AVR toolchains. The package for Ubuntu contailns all the commnd line utilities needed. 
+- avrdude is the standard tool for flashing HEX files to AVR chips. It supports a wide range of hardware programmers, including USBasp, AVRISP mkII, Atmel-ICE, and Arduino-as-ISP.
+- GNU Make. All the source codes for this tutorial rely on it.
