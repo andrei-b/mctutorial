@@ -1,12 +1,13 @@
 #include <avr/io.h>
 #include <avr/boot.h>
-#include <avr/interrupt.h>
-#include <avr/pgmspace.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 #define UBRR_VALUE ((F_CPU / (16UL * BAUD)) - 1)
 #define PAGE_SIZE SPM_PAGESIZE
 #define BOOT_TIMEOUT_MS 200
+
+#define BAUD 9600
 
 void uart_init() {
     UBRR0H = (UBRR_VALUE >> 8);
@@ -46,44 +47,45 @@ void write_flash_page(uint16_t page_addr, uint8_t *buf) {
     boot_rww_enable();
 }
 
-void load_program() {
-    uint8_t page_buf[PAGE_SIZE];
-    uint16_t page_addr = 0x0000;
-
-    while (1) {
-        // Wait for start byte
-        uint8_t start = uart_read();
-        if (start == 0xFF) {
-            for (uint16_t i = 0; i < PAGE_SIZE; ++i)
-                page_buf[i] = uart_read();
-
-            write_flash_page(page_addr, page_buf);
-            page_addr += PAGE_SIZE;
-            uart_write('O');  // Acknowledge
-        } else if (start == 0x00) {
-            uart_write('D');  // Done
-            break;
-        }
-    }
-}
-
 void jump_to_application() {
     cli();
     asm volatile ("jmp 0x0000");
 }
 
 int main(void) {
+    uint8_t page_buf[PAGE_SIZE];
     uart_init();
 
-    // Boot delay waiting for serial upload
     uint16_t timeout = BOOT_TIMEOUT_MS;
     while (timeout--) {
         if (uart_rx_ready()) {
-            load_program();
             break;
         }
         _delay_ms(1);
     }
 
-    jump_to_application();
+    if (!uart_rx_ready()) {
+        jump_to_application();
+    }
+
+    // Enter programming mode
+    while (1) {
+        uint8_t cmd = uart_read();
+        if (cmd == 0x00) {
+            jump_to_application();
+        } else if (cmd == 0x01) {
+            uint16_t addr_lo = uart_read();
+            uint16_t addr_hi = uart_read();
+            uint16_t page_addr = (addr_hi << 8) | addr_lo;
+
+            for (uint16_t i = 0; i < PAGE_SIZE; ++i) {
+                page_buf[i] = uart_read();
+            }
+
+            write_flash_page(page_addr, page_buf);
+            uart_write('K');  // ACK
+        }
+    }
+
+    return 0;
 }
