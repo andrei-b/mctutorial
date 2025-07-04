@@ -1,7 +1,7 @@
 ![ ](./text/img/orly-book-cover.png)
 # Bare-Metal Microcontroller Programming Tutorial
 
-[Intro](./intro.md)
+[Intro](./text/intro.md)
 
 [Chapter 1. Blinking LED and GPIO Registers](./text/ch_01.md)
 
