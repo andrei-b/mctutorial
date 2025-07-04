@@ -1,2 +1,3 @@
 ![ ](./text/img/orly-book-cover.png)
-# mctutorial
+# Bare-Metal Microcontroller Programming Tutorial
+
