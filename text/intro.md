@@ -17,7 +17,10 @@ I am using the Arduino Uno R3. It is the *minimum minimorum* of Arduino boards, 
 You can also use any earlier version of the Uno (prior to R3), but not the Uno R4 — that is a completely different system. The Arduino Mega is also a suitable alternative.
 
 To upload bare-metal code to the Arduino Uno R3 (or any other AVR-based board), you need a hardware programmer. There are several options available, ranging from simple to professional.
-I am using the USBasp, a low-cost open-source programmer that works well with AVRDUDE. It connects via USB and uses the standard 6-pin or 10-pin ISP header (you will need the 6-pin header adapter to program the Arduino boards). It is widely supported and reliable for most development needs.
+I am using the USBasp, a low-cost open-source programmer that works well with AVRDUDE and Arduino UNO. 
+
+📌 USBAsp comes in many different clone forms, and not all of them work well with Arduino Mega board. If using this board for development you may want to consider other programmers like USBTiny. 
+
 Another option is the AVRISP mkII, originally produced by Atmel. It is officially supported by Atmel Studio and provides stable communication with a wide range of AVR chips. However, it requires some driver adjustments under modern operating systems.
 For more advanced use, you can consider the Atmel-ICE, a professional-grade (and higher price) programmer and debugger. Among other things it supports real-time debugging on many AVR chips, including the ATmega328P. With other programmers, we are limited to "printf debugging".
 Finally, in a pinch, you can even use another Arduino as a programmer. The Arduino as ISP sketch lets you turn a regular Uno into a basic ISP programmer — useful and educational, though not as reliable for frequent use.
