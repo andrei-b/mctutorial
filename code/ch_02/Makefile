@@ -1,35 +1,46 @@
-MCU = atmega328p
-F_CPU = 16000000UL
-BAUD = 9600
-PROGRAMMER = usbasp
-PORT = /dev/ttyUSB0
+# AVR Project Makefile
 
+# Target microcontroller
+MCU = atmega328p
+
+# Target file name (without extension)
+TARGET = main
+
+# Compiler and programmer settings
 CC = avr-gcc
 OBJCOPY = avr-objcopy
 AVRDUDE = avrdude
+PROGRAMMER = usbasp
+PORT = /dev/ttyUSB0
 
-CFLAGS = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -Wall
-LDFLAGS = -Wl,--section-start=.text=0x7C00
+# Compiler flags
+CFLAGS = -mmcu=$(MCU) -Os -DF_CPU=16000000UL
 
-TARGET = bootloader
-SRC = bootloader.c
+# Source files
+SRC = main.c uart.c
 
+# Object files
+OBJ = $(SRC:.c=.o)
+
+# Default target
 all: $(TARGET).hex
 
-$(TARGET).elf: $(SRC)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+# Compile source files into object files
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
+# Link object files into an ELF file
+$(TARGET).elf: $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $@
+
+# Convert ELF file to HEX file
 $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
+# Flash the HEX file to the microcontroller
 flash: $(TARGET).hex
-	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) -U flash:w:$(TARGET).hex
+	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) -P $(PORT) -U flash:w:$(TARGET).hex:i
 
-fuse:
-	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) \
-		-U lfuse:w:0xFF:m \
-		-U hfuse:w:0xD6:m \
-		-U efuse:w:0xFD:m
-
+# Clean up build files
 clean:
-	rm -f *.elf *.hex
+	rm -f $(OBJ) $(TARGET).elf $(TARGET).hex
